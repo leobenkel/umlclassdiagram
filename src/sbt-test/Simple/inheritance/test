@@ -1,0 +1,2 @@
+> classDiagram foo.bar.Ggg
+$ exists target/uml-class-diagram/testA.dot
