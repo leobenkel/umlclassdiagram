@@ -1,7 +1,7 @@
 sbtPlugin := true
 
 organization := "com.leobenkel"
-homepage     := Some(url("https://github.com/leobenkel/soteria"))
+homepage     := Some(url("https://github.com/leobenkel/umlclassdiagram"))
 licenses     := List("MIT" -> url("https://opensource.org/licenses/MIT"))
 developers :=
   List(
