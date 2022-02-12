@@ -5,7 +5,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![release-badge][]][release]
 [![maven-central-badge][]][maven-search]
-![CI](https://github.com/leobenkel/umlclassdiagram/workflows/CI-CD/badge.svg)
+[![CI-CD](https://github.com/leobenkel/umlclassdiagram/workflows/CI-CD/badge.svg)](https://github.com/leobenkel/umlclassdiagram/actions/workflows/ci_cd.yml)
 [![BCH compliance](https://bettercodehub.com/edge/badge/leobenkel/umlclassdiagram?branch=main)](https://bettercodehub.com/)
 [![Coverage Status](https://coveralls.io/repos/github/leobenkel/umlclassdiagram/badge.svg?branch=main)](https://coveralls.io/github/leobenkel/umlclassdiagram?branch=main)
 
