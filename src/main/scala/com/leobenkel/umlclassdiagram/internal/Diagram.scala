@@ -114,7 +114,7 @@ ${edges.mkString("\n")}
   def defaultSettings(name: String): DiagramSetting =
     DiagramSetting(
       name = name,
-      commonNodeSetting = Map.empty,
+      commonNodeSetting = Map("shape" -> "box"),
       commonEdgeSetting = Map.empty,
       nodeSetting = _ => Map.empty,
       edgeSetting = (_, _) => Map.empty,

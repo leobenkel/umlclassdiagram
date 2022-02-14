@@ -1,7 +1,8 @@
 package com.leobenkel.umlclassdiagram.internal
 
-import Node._
-import scala.annotation.tailrec
+import com.leobenkel.umlclassdiagram.internal.Node._
+import java.lang.reflect._
+import scala.reflect.ClassTag
 import scala.util.Try
 
 //noinspection scala2InSource3
@@ -9,6 +10,8 @@ class Node private (
   val current: Class[_],
   classLoader: ClassLoader
 ) {
+  import Node.Utils._
+
   implicit private class FilteringClasses(input: Set[Class[_]]) {
     lazy val noCurrent: Set[Class[_]] = input.filterNot(_ === current)
     lazy val noStdLib: Set[Class[_]] = input.filterNot { c =>
@@ -29,7 +32,9 @@ class Node private (
 
   lazy val className: String = current.getName
 
-  lazy private val directParentClass: Set[Class[_]] = Option(current.getSuperclass)
+  lazy private val directParentClass: Set[Class[_]] = current
+    .getSuperclass
+    .safe
     .map(Set[Class[_]](_))
     .getOrElse(Set.empty)
   lazy private val directParentClassForStatic: Set[Class[_]] = currentStatic
@@ -58,36 +63,68 @@ class Node private (
   }
 
   lazy private val allParentClasses: Set[Class[_]] = {
-    @tailrec
     def loop(
       current: Class[_],
       acc:     Set[Class[_]] = Set.empty
     ): Set[Class[_]] = {
       val newAcc: Set[Class[_]] = acc + current
-      Option(current.getSuperclass) match {
-        case Some(p) => loop(p, newAcc)
-        case None    => newAcc
-      }
+      current.getSuperclass.safe.map(loop(_, newAcc)).getOrElse(newAcc)
     }
 
-    loop(this.current) ++ this.currentStatic.map(loop(_)).getOrElse(Set.empty)
+    loop(this.current) |+| this.currentStatic.map(loop(_))
   }
 
-  lazy val allParentClassAndInterfaces: Set[Class[_]] = (allInterfaces ++ allParentClasses).filtered
-  lazy val allInterfacesFiltered:       Set[Class[_]] = allInterfaces.filtered
-  lazy val allParentClassesFiltered:    Set[Class[_]] = allParentClasses.filtered
-  lazy val allParentAndTraitFiltered:   Set[Class[_]] = allParentClassAndInterfaces.filtered
-  lazy val allImmediateParents: Set[Class[_]] =
+  lazy private val allParentClassAndInterfaces: Set[Class[_]] = (allInterfaces ++ allParentClasses)
+    .filtered
+  lazy private[internal] val allInterfacesFiltered:    Set[Class[_]] = allInterfaces.filtered
+  lazy private[internal] val allParentClassesFiltered: Set[Class[_]] = allParentClasses.filtered
+  lazy private[internal] val allParentAndTraitFiltered: Set[Class[_]] = allParentClassAndInterfaces
+    .filtered
+  lazy private[internal] val allImmediateParents: Set[Class[_]] =
     (directInterfaces ++ directInterfacesForStatic ++ directParentClassForStatic ++
       directParentClass).filtered
 
   lazy val parents: Set[Node] = allImmediateParents.map(Node(_, classLoader))
 
   lazy override val toString: String = s"N(${current.getName})"
+
+  lazy private val methods: Set[Method] =
+    current.getDeclaredMethods.toSet |++| currentStatic.map(_.getDeclaredMethods)
+
+  lazy private val inputs:             Set[Class[_]] = methods.flatMap(_.getParameterTypes)
+  lazy private val returns:            Set[Class[_]] = methods.map(_.getReturnType)
+  lazy private val possibleExceptions: Set[Class[_]] = methods.flatMap(_.getExceptionTypes)
+
+  lazy private val constructors: Set[Constructor[_]] =
+    current.getConstructors.toSet |++| currentStatic.map(_.getConstructors)
+  lazy private val classForConstruction: Set[Class[_]] = constructors.flatMap(_.getParameterTypes)
+  lazy private val exceptionForConstruction: Set[Class[_]] = constructors
+    .flatMap(_.getExceptionTypes)
+
+  lazy private val fields: Set[Field] =
+    current.getDeclaredFields.toSet |++| currentStatic.map(_.getDeclaredFields)
+
+  lazy private val classForFields: Set[Class[_]] = fields.map(_.getType)
+
+  lazy val enclosingClass: Option[Class[_]] =
+    current.getEnclosingClass.safe orElse currentStatic.flatMap[Class[_]](_.getEnclosingClass.safe)
+
+  lazy val pack: Option[Package] = current.getPackage.safe orElse
+    currentStatic.flatMap(_.getPackage.safe)
+
+  lazy val producedType:   Set[Class[_]] = classForFields ++ returns
+  lazy val inputTypes:     Set[Class[_]] = classForConstruction ++ inputs
+  lazy val exceptionTypes: Set[Class[_]] = possibleExceptions ++ exceptionForConstruction
+
+  lazy val classInvolvedByThisClass: Set[Class[_]] = producedType ++ inputTypes ++ exceptionTypes ++
+    allImmediateParents ++ enclosingClass
 }
 
 //noinspection scala2InSource3
 private[umlclassdiagram] object Node {
+  implicit val ordering: Ordering[Node] = (x: Node, y: Node) =>
+    x.current.getName.compare(y.current.getName)
+
   def unapply(n: Node): Option[Class[_]] = Some(n.current)
 
   def apply(
@@ -111,6 +148,24 @@ private[umlclassdiagram] object Node {
     def loadClassSafely(s: String): Try[Class[_]] = Try(cl.loadClass(s))
   }
 
-  implicit val ordering: Ordering[Node] = (x: Node, y: Node) =>
-    x.current.getName.compare(y.current.getName)
+  private[Node] object Utils {
+
+    implicit class SetWithOpt[A: ClassTag](s: Set[A]) {
+      def ++(opt: Option[A]): Set[A] = this |+| opt.map(Set(_))
+
+      def |+|(opt: Option[Set[A]]): Set[A] = {
+        val optSet: Set[A] = opt.getOrElse(Set.empty)
+        s ++ optSet
+      }
+
+      def |++|(opt: Option[scala.Array[A]]): Set[A] = {
+        val optSet: Set[A] = opt.getOrElse(scala.Array.empty[A]).toSet
+        s ++ optSet
+      }
+    }
+
+    implicit class CouldBeNull[A](s: A) {
+      def safe: Option[A] = Option(s)
+    }
+  }
 }
