@@ -1,17 +1,17 @@
 package com.leobenkel.umlclassdiagram.internal
+
 import java.io.File
-import scala.collection.immutable
 
 //noinspection scala2InSource3
 object Diagram {
   case class DiagramContent(s: String) extends AnyVal
 
   def apply(
-    input:       ClassPath,
+    input:       Seq[ClassPath],
     classLoader: ClassLoader,
     settings:    DiagramSetting
   ): DiagramContent = {
-    val nodes: Set[Node] = ProcessClassPath(input)(classLoader)
+    val nodes: Set[Node] = input.toSet[ClassPath].flatMap(ProcessClassPath(_)(classLoader))
     val expanded = {
       def loop(
         current: Node,
@@ -21,8 +21,8 @@ object Diagram {
       nodes.flatMap(loop(_))
     }
 
-    // TODO: Change style in settings for package looked at from input
-    //  and for specific class looked at from input.
+    // TODO: Change style in settings for packages looked at from input
+    //  and for specific classes looked at from input.
     produceDiagram(expanded.toList, settings)
   }
 

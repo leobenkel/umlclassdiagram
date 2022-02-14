@@ -11,8 +11,10 @@ class DiagramTest extends AnyFreeSpec with Matchers {
   "Diagram" - {
     "produce diagram" in {
       val diagram: DiagramContent = Diagram(
-        ClassPath
-          .make("com", "leobenkel", "umlclassdiagram", "testingBundle", "pack")(ClassName("C")),
+        Seq(
+          ClassPath
+            .make("com", "leobenkel", "umlclassdiagram", "testingBundle", "pack")(ClassName("C"))
+        ),
         classLoader,
         Diagram.defaultSettings("test")
       )
@@ -22,6 +24,25 @@ class DiagramTest extends AnyFreeSpec with Matchers {
       diagram.s should include("pack.Foo")
       diagram.s should include("pack.A")
       diagram.s should include("pack.B")
+    }
+
+    "produce diagram for more than one" in {
+      val diagram: DiagramContent = Diagram(
+        Seq(
+          ClassPath
+            .make("com", "leobenkel", "umlclassdiagram", "testingBundle", "pack")(ClassName("C")),
+          ClassPath
+            .make("com", "leobenkel", "umlclassdiagram", "testingBundle", "pack")(ClassName("O"))
+        ),
+        classLoader,
+        Diagram.defaultSettings("test")
+      )
+
+      diagram.s should include("pack.C")
+      diagram.s should include("pack.Foo")
+      diagram.s should include("pack.A")
+      diagram.s should include("pack.B")
+      diagram.s should include("pack.O")
     }
   }
 }

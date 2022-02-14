@@ -29,8 +29,8 @@ object InputParser {
     case (p, l) => ClassPath(p, l)
   }
 
-  lazy val root: sbt.complete.Parser[ClassPath] = Space ~> fullPackageName
+  lazy val root: sbt.complete.Parser[Seq[ClassPath]] = (Space ~> fullPackageName).+
 
-  def apply(input: String): Parser.Result[ClassPath] =
+  def apply(input: String): Parser.Result[Seq[ClassPath]] =
     sbt.complete.Parser.apply(root)(input).resultEmpty
 }

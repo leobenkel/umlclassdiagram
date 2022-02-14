@@ -89,6 +89,12 @@ To browse entire package:
 sbt classDiagram path.to.package.*
 ```
 
+And those can be combined:
+
+```bash
+sbt classDiagram path.to.Class path.to.package.* pack.to.other.Class
+```
+
 ## Settings
 
 ### To open the folder with output files and/or the SVG image

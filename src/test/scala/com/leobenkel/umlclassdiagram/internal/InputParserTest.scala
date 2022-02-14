@@ -40,7 +40,7 @@ class InputParserTest extends AnyFreeSpec with Matchers {
       r.isValid shouldBe true
       r.errors.isEmpty shouldBe true
       r.toEither.right.get shouldBe
-        ClassPath(Seq(PackageName("com"), PackageName("leobenkel")), Wildcard)
+        Seq(ClassPath(Seq(PackageName("com"), PackageName("leobenkel")), Wildcard))
     }
 
     "valid with className" in {
@@ -49,9 +49,61 @@ class InputParserTest extends AnyFreeSpec with Matchers {
       r.isValid shouldBe true
       r.errors.isEmpty shouldBe true
       r.toEither.right.get shouldBe
-        ClassPath(
-          Seq(PackageName("com"), PackageName("leobenkel"), PackageName("foo")),
-          ClassName("Bar")
+        Seq(
+          ClassPath(
+            Seq(PackageName("com"), PackageName("leobenkel"), PackageName("foo")),
+            ClassName("Bar")
+          )
+        )
+    }
+
+    "valid with more than one className" in {
+      val r = InputParser(" com.leobenkel.foo.Bar com.leobenkel.foo.Foo com.leobenkel.foo.Thing")
+      r.isFailure shouldBe false
+      r.isValid shouldBe true
+      r.errors.isEmpty shouldBe true
+      r.toEither.right.get shouldBe
+        Seq(
+          ClassPath(
+            Seq(PackageName("com"), PackageName("leobenkel"), PackageName("foo")),
+            ClassName("Bar")
+          ),
+          ClassPath(
+            Seq(PackageName("com"), PackageName("leobenkel"), PackageName("foo")),
+            ClassName("Foo")
+          ),
+          ClassPath(
+            Seq(PackageName("com"), PackageName("leobenkel"), PackageName("foo")),
+            ClassName("Thing")
+          )
+        )
+    }
+
+    "valid with more than mixed className" in {
+      val r = InputParser(
+        " com.leobenkel.foo.Bar com.leobenkel.bar.* com.leobenkel.foo.Thing  com.leobenkel.a.*"
+      )
+      r.isFailure shouldBe false
+      r.isValid shouldBe true
+      r.errors.isEmpty shouldBe true
+      r.toEither.right.get shouldBe
+        Seq(
+          ClassPath(
+            Seq(PackageName("com"), PackageName("leobenkel"), PackageName("foo")),
+            ClassName("Bar")
+          ),
+          ClassPath(
+            Seq(PackageName("com"), PackageName("leobenkel"), PackageName("bar")),
+            Wildcard
+          ),
+          ClassPath(
+            Seq(PackageName("com"), PackageName("leobenkel"), PackageName("foo")),
+            ClassName("Thing")
+          ),
+          ClassPath(
+            Seq(PackageName("com"), PackageName("leobenkel"), PackageName("a")),
+            Wildcard
+          )
         )
     }
   }

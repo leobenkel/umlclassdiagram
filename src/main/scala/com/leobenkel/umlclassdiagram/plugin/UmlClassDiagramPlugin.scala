@@ -20,13 +20,13 @@ object UmlClassDiagramPlugin extends AutoPlugin {
 
   private def classDiagramRun: Def.Initialize[InputTask[Unit]] =
     Def.inputTaskDyn {
-      val classPath = InputParser.root.parsed
+      val classPath: Seq[ClassPath] = InputParser.root.parsed
 
       makeDiagram(classPath)
     }
 
   private def makeDiagram(
-    input: ClassPath
+    input: Seq[ClassPath]
   ): Def.Initialize[Task[Unit]] =
     Def.taskDyn {
       val classLoader = (Test / SbtKeys.testLoader).value
