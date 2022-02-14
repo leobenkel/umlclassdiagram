@@ -18,6 +18,12 @@ class Node private (
       c.getName.startsWith("scala.") || c.getName.startsWith("java.")
     }
     lazy val filtered: Set[Class[_]] = noCurrent.noStdLib
+
+    lazy val toNodes: Set[Node] = input.flatMap(_.toNode)
+  }
+
+  implicit private class ClassExtra(c: Class[_]) {
+    lazy val toNode: Option[Node] = Try(Node(c, classLoader)).toOption
   }
 
   override def equals(obj: Any): Boolean =
@@ -25,6 +31,8 @@ class Node private (
       case Node(c) => c === this.current
       case _       => false
     }
+
+  override def hashCode(): Int = this.current.getName.hashCode
 
   lazy private val currentStatic: Option[Class[_]] = classLoader
     .loadClassSafely(current.getName + "$")
@@ -106,18 +114,21 @@ class Node private (
 
   lazy private val classForFields: Set[Class[_]] = fields.map(_.getType)
 
-  lazy val enclosingClass: Option[Class[_]] =
-    current.getEnclosingClass.safe orElse currentStatic.flatMap[Class[_]](_.getEnclosingClass.safe)
+  lazy val enclosingClass: Option[Node] =
+    (current.getEnclosingClass.safe orElse
+      currentStatic.flatMap[Class[_]](_.getEnclosingClass.safe)).flatMap(_.toNode)
 
   lazy val pack: Option[Package] = current.getPackage.safe orElse
     currentStatic.flatMap(_.getPackage.safe)
 
-  lazy val producedType:   Set[Class[_]] = classForFields ++ returns
-  lazy val inputTypes:     Set[Class[_]] = classForConstruction ++ inputs
-  lazy val exceptionTypes: Set[Class[_]] = possibleExceptions ++ exceptionForConstruction
+  // TODO: Will not work for nested type like arrays
 
-  lazy val classInvolvedByThisClass: Set[Class[_]] = producedType ++ inputTypes ++ exceptionTypes ++
-    allImmediateParents ++ enclosingClass
+  lazy val producedType:   Set[Node] = (classForFields ++ returns).toNodes
+  lazy val inputTypes:     Set[Node] = (classForConstruction ++ inputs).toNodes
+  lazy val exceptionTypes: Set[Node] = (possibleExceptions ++ exceptionForConstruction).toNodes
+
+  lazy val classInvolvedByThisClass: Set[Node] = producedType ++ inputTypes ++ exceptionTypes ++
+    parents ++ enclosingClass
 }
 
 //noinspection scala2InSource3

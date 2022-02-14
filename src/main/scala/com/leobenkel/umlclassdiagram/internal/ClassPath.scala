@@ -8,11 +8,22 @@ import org.reflections.util.ConfigurationBuilder
 
 //noinspection scala2InSource3
 case class ClassPath(
-  path: Seq[PackageName],
-  leaf: Leaf
+  private val path: Seq[PackageName],
+  private val leaf: Leaf
 ) {
-  lazy final override val toString:         String = s"${path.toPath}.$leaf"
+  override def equals(obj: Any): Boolean =
+    obj match {
+      case c: ClassPath => this.toString equals c.toString
+      case _ => false
+    }
+
+  override def hashCode(): Int = this.toString.hashCode
+
+  lazy final override val toString: String = s"${path.toPath}.$leaf"
+
   def getClasses(classLoader: ClassLoader): Set[Class[_]] = leaf.getClassesWith(classLoader, path)
+  lazy private val packageName:             String = path.toPath
+  def isValid(n: Node):                     Boolean = n.className.startsWith(packageName)
 }
 
 //noinspection scala2InSource3
