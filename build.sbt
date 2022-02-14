@@ -12,6 +12,8 @@ developers :=
       url("https://leobenkel.com")
     )
   )
+sonatypeCredentialHost := "oss.sonatype.org"
+sonatypeRepository     := "https://oss.sonatype.org/service/local"
 val projectName = IO.readLines(new File("PROJECT_NAME")).head
 name := projectName
 
