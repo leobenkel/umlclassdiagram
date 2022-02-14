@@ -123,9 +123,11 @@ class Node private (
 
   // TODO: Will not work for nested type like arrays
 
-  lazy val producedType:   Set[Node] = (classForFields ++ returns).toNodes
-  lazy val inputTypes:     Set[Node] = (classForConstruction ++ inputs).toNodes
-  lazy val exceptionTypes: Set[Node] = (possibleExceptions ++ exceptionForConstruction).toNodes
+  lazy val producedType: Set[Node] = (classForFields ++ returns).filtered.toNodes
+  lazy val inputTypes:   Set[Node] = (classForConstruction ++ inputs).filtered.toNodes
+  lazy val exceptionTypes: Set[Node] = (possibleExceptions ++ exceptionForConstruction)
+    .filtered
+    .toNodes
 
   lazy val classInvolvedByThisClass: Set[Node] = producedType ++ inputTypes ++ exceptionTypes ++
     parents ++ enclosingClass
