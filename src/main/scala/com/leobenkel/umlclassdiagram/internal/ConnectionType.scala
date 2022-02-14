@@ -8,11 +8,19 @@ sealed trait ConnectionType {
   protected def style:      Style
   protected def arrowStyle: ArrowStyle
 
+  lazy private val arrowHead: Map[String, String] = (direction match {
+    case Directions.forward => Map("arrowhead" -> arrowStyle.toString)
+    case Directions.back    => Map("arrowtail" -> arrowStyle.toString)
+    case Directions.both =>
+      Map(
+        "arrowhead" -> arrowStyle.toString,
+        "arrowtail" -> arrowStyle.toString
+      )
+  }) ++ Map("dir" -> direction.toString)
+
   lazy final val graphEdgeSettings: Map[String, String] = Map(
-    "style"     -> style.toString,
-    "direction" -> direction.toString,
-    "arrowhead" -> arrowStyle.toString
-  )
+    "style" -> style.toString
+  ) ++ arrowHead
 }
 
 object ConnectionType {
