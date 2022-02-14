@@ -23,9 +23,9 @@ class Node private (
       case _       => false
     }
 
-  lazy private val currentStatic: Option[Class[_]] = Try(
-    classLoader.loadClass(current.getName + "$")
-  ).toOption
+  lazy private val currentStatic: Option[Class[_]] = classLoader
+    .loadClassSafely(current.getName + "$")
+    .toOption
 
   lazy val className: String = current.getName
 
@@ -105,6 +105,10 @@ private[umlclassdiagram] object Node {
 
     lazy val noDollarTrim: String =
       if (name.endsWith("$")) name.substring(0, name.length - 1) else name
+  }
+
+  implicit class SafeLoader(cl: ClassLoader) {
+    def loadClassSafely(s: String): Try[Class[_]] = Try(cl.loadClass(s))
   }
 
   implicit val ordering: Ordering[Node] = (x: Node, y: Node) =>

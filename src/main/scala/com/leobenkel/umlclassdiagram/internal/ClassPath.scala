@@ -1,6 +1,7 @@
 package com.leobenkel.umlclassdiagram.internal
 
 import com.leobenkel.umlclassdiagram.internal.ClassPath._
+import com.leobenkel.umlclassdiagram.internal.Node._
 import org.reflections.Reflections
 import org.reflections.scanners.Scanners.SubTypes
 import org.reflections.util.ConfigurationBuilder
@@ -36,7 +37,7 @@ object ClassPath {
           case c if c.endsWith("$") => c.substring(0, c.length - 1)
           case c                    => c
         }
-        .map(classLoader.loadClass)
+        .flatMap(classLoader.loadClassSafely(_).toOption)
 
     protected def getClasses(
       classLoader: ClassLoader,

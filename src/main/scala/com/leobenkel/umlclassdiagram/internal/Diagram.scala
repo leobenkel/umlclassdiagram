@@ -26,6 +26,15 @@ object Diagram {
     produceDiagram(expanded.toList, settings)
   }
 
+  def readDotFileContent(
+    dir:      String,
+    settings: DiagramSetting
+  ): DiagramContent = {
+    val name = settings.name
+    val dotFile = new File(dir, name + ".dot")
+    DiagramContent(sbt.IO.read(dotFile))
+  }
+
   /**
    * https://github.com/xuwei-k/sbt-class-diagram/blob/37c325d5b58f91a66b82b8bf5f538a6458570326/src/main/scala/Diagram.scala#L21-L29
    */
@@ -65,6 +74,7 @@ object Diagram {
     }
 
     val nodes: List[String] = allClassNodes
+      .filter(n => setting.filter(n.current))
       .map(n => quote(n.className) + map2string("", setting.nodeSetting(n.current)))
       .distinct
       .sorted
