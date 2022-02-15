@@ -38,6 +38,7 @@ Inspired by [xuwei-k/sbt-class-diagram](https://github.com/xuwei-k/sbt-class-dia
    * [Requirements](#requirements)
    * [Enable plugin](#enable-plugin)
    * [Which connections would you like to show?](#which-connections-would-you-like-to-show)
+   * [Styling](#styling)
 * [Use](#use)
 * [Settings](#settings)
    * [To open the folder with output files and/or the SVG image](#to-open-the-folder-with-output-files-andor-the-svg-image)
@@ -112,6 +113,10 @@ The possibilities are:
   * Will connect the classes to the classes being thrown
 * **Enclosing**
   * Will connect the classes to the parent class where the class is defined is it exist.
+
+### Styling
+
+You can read more about the key/values available for dot graph styling with this document: https://www.graphviz.org/pdf/dotguide.pdf .
 
 ## Use
 
