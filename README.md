@@ -1,3 +1,7 @@
+
+
+![umlclassdiagram example][umlclassdiagram-img]
+
 # UML Class Diagram for Scala
 
 
@@ -31,8 +35,6 @@
 
 
 Inspired by [xuwei-k/sbt-class-diagram](https://github.com/xuwei-k/sbt-class-diagram)
-
-![umlclassdiagram example][umlclassdiagram-img]
 
 ## Table of Contents
 
