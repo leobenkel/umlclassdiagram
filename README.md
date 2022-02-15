@@ -37,6 +37,7 @@ Inspired by [xuwei-k/sbt-class-diagram](https://github.com/xuwei-k/sbt-class-dia
 * [Setup](#setup)
    * [Requirements](#requirements)
    * [Enable plugin](#enable-plugin)
+   * [Which connections would you like to show?](#which-connections-would-you-like-to-show)
 * [Use](#use)
 * [Settings](#settings)
    * [To open the folder with output files and/or the SVG image](#to-open-the-folder-with-output-files-andor-the-svg-image)
@@ -74,6 +75,43 @@ and then
 enablePlugins(UmlClassDiagramPlugin)
 ```
 to `build.sbt`
+
+### Which connections would you like to show?
+
+To change which connection you would like to display, add this:
+```scala
+
+classDiagramSettings :=
+  classDiagramSettings
+    .value
+    .copy(
+      enabledConnectionTypes =
+        Set(
+          com.leobenkel.umlclassdiagram.internal.ConnectionType.Inherit,
+          com.leobenkel.umlclassdiagram.internal.ConnectionType.Produce,
+          com.leobenkel.umlclassdiagram.internal.ConnectionType.Consume,
+          com.leobenkel.umlclassdiagram.internal.ConnectionType.Throw,
+          com.leobenkel.umlclassdiagram.internal.ConnectionType.Enclosing,
+        ),
+    )
+```
+
+to your `build.sbt`.
+
+The possibilities are:
+
+* **Inherit**
+  * will connect the classes with their parent trait and classes
+  * This is the **default** behavior.
+* **Produce**
+  * Will connect the classes to the classes that can be returned
+  * Will not find out about generic type like `Seq[A]` or `Foo[A]`
+* **Consume**
+  * Will connect the classes to the classes that are used as arguments
+* **Throw**
+  * Will connect the classes to the classes being thrown
+* **Enclosing**
+  * Will connect the classes to the parent class where the class is defined is it exist.
 
 ## Use
 
