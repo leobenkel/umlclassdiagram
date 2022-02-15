@@ -27,10 +27,12 @@
 [maven-central-link-test]:           https://maven-badges.herokuapp.com/maven-central/com.leobenkel/umlclassdiagram-test_2.11
 [maven-central-badge-test]:          https://maven-badges.herokuapp.com/maven-central/com.leobenkel/umlclassdiagram-test_2.11/badge.svg
 
-
+[umlclassdiagram-img]: https://raw.githubusercontent.com/leobenkel/umlclassdiagram/main/assets/umlclassdiagram-classDiagram-internal.png
 
 
 Inspired by [xuwei-k/sbt-class-diagram](https://github.com/xuwei-k/sbt-class-diagram)
+
+![umlclassdiagram example][umlclassdiagram-img]
 
 ## Table of Contents
 
