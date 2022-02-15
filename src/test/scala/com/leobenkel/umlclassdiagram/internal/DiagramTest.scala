@@ -11,7 +11,7 @@ class DiagramTest extends AnyFreeSpec with Matchers {
   "Diagram" - {
     "produce diagram" in {
       val diagram: DiagramContent = Diagram(
-        Seq(
+        Set(
           ClassPath
             .make("com", "leobenkel", "umlclassdiagram", "testingBundle", "pack")(ClassName("C"))
         ),
@@ -28,7 +28,7 @@ class DiagramTest extends AnyFreeSpec with Matchers {
 
     "produce diagram for more than one" in {
       val diagram: DiagramContent = Diagram(
-        Seq(
+        Set(
           ClassPath
             .make("com", "leobenkel", "umlclassdiagram", "testingBundle", "pack")(ClassName("C")),
           ClassPath

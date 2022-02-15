@@ -40,7 +40,7 @@ class InputParserTest extends AnyFreeSpec with Matchers {
       r.isValid shouldBe true
       r.errors.isEmpty shouldBe true
       r.toEither.right.get shouldBe
-        Seq(ClassPath(Seq(PackageName("com"), PackageName("leobenkel")), Wildcard))
+        Set(ClassPath(Seq(PackageName("com"), PackageName("leobenkel")), Wildcard))
     }
 
     "valid with className" in {
@@ -49,7 +49,7 @@ class InputParserTest extends AnyFreeSpec with Matchers {
       r.isValid shouldBe true
       r.errors.isEmpty shouldBe true
       r.toEither.right.get shouldBe
-        Seq(
+        Set(
           ClassPath(
             Seq(PackageName("com"), PackageName("leobenkel"), PackageName("foo")),
             ClassName("Bar")
@@ -63,7 +63,7 @@ class InputParserTest extends AnyFreeSpec with Matchers {
       r.isValid shouldBe true
       r.errors.isEmpty shouldBe true
       r.toEither.right.get shouldBe
-        Seq(
+        Set(
           ClassPath(
             Seq(PackageName("com"), PackageName("leobenkel"), PackageName("foo")),
             ClassName("Bar")
@@ -87,7 +87,7 @@ class InputParserTest extends AnyFreeSpec with Matchers {
       r.isValid shouldBe true
       r.errors.isEmpty shouldBe true
       r.toEither.right.get shouldBe
-        Seq(
+        Set(
           ClassPath(
             Seq(PackageName("com"), PackageName("leobenkel"), PackageName("foo")),
             ClassName("Bar")
