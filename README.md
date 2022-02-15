@@ -146,7 +146,7 @@ in your `build.sbt`.
 ### To change the name of the file
 
 ```scala
-classDiagramFileName := "foo"
+classDiagramSettings := classDiagramSettings.value.copy(name = "foo")
 ```
 
 in your `build.sbt`.
