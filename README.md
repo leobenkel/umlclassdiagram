@@ -16,8 +16,7 @@
 
 [release]:              https://github.com/leobenkel/umlclassdiagram/releases
 [release-badge]:        https://img.shields.io/github/tag/leobenkel/umlclassdiagram.svg?label=version&color=blue
-[maven-search]:         https://search.maven.org/search?q=g:com.leobenkel%20a:umlclassdiagram*
-[maven-search-test]:         https://search.maven.org/search?q=g:com.leobenkel%20a:umlclassdiagram-test*
+[maven-search]:         https://search.maven.org/artifact/com.leobenkel/umlclassdiagram
 [leobenkel-github-badge]:     https://img.shields.io/badge/-Github-yellowgreen.svg?style=social&logo=GitHub&logoColor=black
 [leobenkel-github-link]:      https://github.com/leobenkel
 [leobenkel-linkedin-badge]:     https://img.shields.io/badge/-Linkedin-yellowgreen.svg?style=social&logo=LinkedIn&logoColor=black
@@ -26,10 +25,8 @@
 [leobenkel-personal-link]:      https://leobenkel.com
 [leobenkel-patreon-link]:            https://www.patreon.com/leobenkel
 [leobenkel-patreon-badge]: https://img.shields.io/badge/-Patreon-yellowgreen.svg?style=social&logo=Patreon&logoColor=black
-[maven-central-link]:           https://maven-badges.herokuapp.com/maven-central/com.leobenkel/umlclassdiagram_2.11
-[maven-central-badge]:          https://maven-badges.herokuapp.com/maven-central/com.leobenkel/umlclassdiagram_2.11/badge.svg
-[maven-central-link-test]:           https://maven-badges.herokuapp.com/maven-central/com.leobenkel/umlclassdiagram-test_2.11
-[maven-central-badge-test]:          https://maven-badges.herokuapp.com/maven-central/com.leobenkel/umlclassdiagram-test_2.11/badge.svg
+[maven-central-link]:           https://maven-badges.herokuapp.com/maven-central/com.leobenkel/umlclassdiagram
+[maven-central-badge]:          https://maven-badges.herokuapp.com/maven-central/com.leobenkel/umlclassdiagram/badge.svg
 
 [umlclassdiagram-img]: https://raw.githubusercontent.com/leobenkel/umlclassdiagram/main/assets/umlclassdiagram-classDiagram-internal.png
 
@@ -75,6 +72,8 @@ addSbtPlugin("com.leobenkel" % "umlclassdiagram" % "[VERSION]")
 ```
 
 to `project/plugin.sbt`
+
+Version: [![maven-central-badge][]][maven-search]
 
 and then 
 
