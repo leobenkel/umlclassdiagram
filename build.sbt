@@ -35,7 +35,7 @@ libraryDependencies += "commons-logging" % "commons-logging" % "1.2"
 libraryDependencies += "org.reflections" % "reflections"     % "0.10.2"
 
 // Test
-libraryDependencies += "org.scalatest" %% "scalatest" % "3.2.13" % Test
+libraryDependencies += "org.scalatest" %% "scalatest" % "3.2.14" % Test
 
 import org.scoverage.coveralls.Imports.CoverallsKeys.{coverallsFailBuildOnError, coverallsFile}
 
