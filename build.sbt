@@ -50,7 +50,7 @@ scriptedBatchExecution    := false
 
 coverageOutputDebug := true
 
-coverallsFailBuildOnError := false
+coverallsFailBuildOnError := true
 
 coverallsFile := baseDirectory.value / "coveralls/coveralls.json"
 
