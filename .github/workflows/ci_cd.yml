@@ -26,7 +26,7 @@ jobs:
       - name: unit-test-coverage
         run: sbt ";clean; coverage; test; coverageReport; coveralls"
         env:
-          COVERALLS_REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
 
       - name: release-staging
         run: sbt ";set isSnapshot := true ; clean ; ci-release"
