@@ -31,7 +31,7 @@ addSbtPlugin("org.scalameta" % "sbt-scalafmt" % "2.5.0")
 
 addSbtPlugin("net.virtual-void" % "sbt-dependency-graph" % "0.9.2")
 
-libraryDependencies += "commons-logging" % "commons-logging" % "1.2"
+libraryDependencies += "commons-logging" % "commons-logging" % "1.3.1"
 libraryDependencies += "org.reflections" % "reflections"     % "0.10.2"
 
 // Test
